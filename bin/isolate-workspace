@@ -23,7 +23,7 @@ async function run({ workspaceName, outputFolder }) {
   await localizeWorkspaceDependencies(
     path.join(outputFolder, 'package.json'),
     workspaces,
-    path.join(outputFolder, 'node_modules')
+    'node_modules'
   )
 
   await Promise.all(
@@ -36,14 +36,19 @@ async function run({ workspaceName, outputFolder }) {
       await localizeWorkspaceDependencies(
         path.join(outputFolder, 'node_modules', wd, 'package.json'),
         workspaces,
-        path.join(outputFolder, 'node_modules')
+        'node_modules'
       )
     })
   )
 }
 
 async function getWorkspaceInfo(rootFolder) {
-  const stdout = await runCommandAsyncPipe(rootFolder, 'yarn', ['--silent', 'workspaces', 'info'])
+  if (osvar == 'win32') {
+    const stdout = await runCommandAsyncPipe(rootFolder, 'yarn.cmd', ['--silent', 'workspaces', 'info'])
+  }
+  else {
+    const stdout = await runCommandAsyncPipe(rootFolder, 'yarn', ['--silent', 'workspaces', 'info'])
+  }
   return JSON.parse(stdout.toString('utf8'))
 }
 
