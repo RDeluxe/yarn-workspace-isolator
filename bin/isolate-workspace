@@ -43,14 +43,7 @@ async function run({ workspaceName, outputFolder }) {
 }
 
 async function getWorkspaceInfo(rootFolder) {
-  const osvar = process.platform;
-  let stdout;
-  if (osvar == 'win32') {
-    stdout = await runCommandAsyncPipe(rootFolder, 'yarn.cmd', ['--silent', 'workspaces', 'info'])
-  }
-  else {
-    stdout = await runCommandAsyncPipe(rootFolder, 'yarn', ['--silent', 'workspaces', 'info'])
-  }
+  const stdout = await runCommandAsyncPipe(rootFolder, 'yarn', ['--silent', 'workspaces', 'info'])
   return JSON.parse(stdout.toString('utf8'))
 }
 
